@@ -1,7 +1,14 @@
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
 import { MongoClient } from "mongodb";
-import { OpenAIEmbeddings } from "@langchain/openai";
+// import { OpenAIEmbeddings } from "@langchain/openai";
 import ENV from "./env";
+import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
+
+const embeddings = new OllamaEmbeddings({
+  model: "nomic-embed-text",
+  maxConcurrency: 5,
+
+});
 
 export default class ConnectMongoDB {
     private static client = new MongoClient(ENV.URL_MONGO || '');
@@ -10,9 +17,10 @@ export default class ConnectMongoDB {
 
     public static async vectorStore() {
         return await MongoDBAtlasVectorSearch.fromTexts(
-            ["Hello world", "Bye bye", "What's this?"],
-            [{ id: 2 }, { id: 1 }, { id: 3 }],
-            new OpenAIEmbeddings({openAIApiKey: ENV.OPENAI_API_KEY, modelName: ENV.OPENAI_MODEL, dimensions: 1024 }),
+            ["Dolor de cabeza", "Dolor de muela"],
+            [{ id: 2, quality: 'padecimiento' }, { id: 1, quality: 'medicamento' }],
+            // new OpenAIEmbeddings({openAIApiKey: ENV.OPENAI_API_KEY, modelName: ENV.OPENAI_MODEL, dimensions: 1024 }),
+            embeddings,
             {
               collection: this.collection,
               indexName: "default", // The name of the Atlas search index. Defaults to "default"

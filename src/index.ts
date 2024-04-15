@@ -13,8 +13,8 @@ app.listen(ENV.PORT, () => {
         try {
             const vectorStore = await ConnectMongoDB.vectorStore();
             console.log(vectorStore);
-            const document = await ConnectMongoDB.document(vectorStore);
-            console.log(document);
+            // const document = await ConnectMongoDB.document(vectorStore);
+            // console.log(document);
         } catch (error) {
             console.log(error);
         }
